@@ -156,32 +156,3 @@ jobs:
         with:
           files: apk/app-release.apk
           body_path: changelog/changelog.txt
-
-  release-play:
-    name: Release App on Google Play
-    needs:
-      - build-bundle
-      - prepare-release-notes
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download aab from build
-        uses: actions/download-artifact@v8
-        with:
-          name: aab
-          path: aab
-
-      - name: Download whatsnew
-        uses: actions/download-artifact@v8
-        with:
-          name: whatsnew
-          path: whatsnew
-
-      - name: Publish on Play
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-          packageName: nz.eloque.foss_wallet
-          releaseFiles: aab/*.aab
-          track: production
-          status: completed
-          whatsNewDirectory: whatsnew
